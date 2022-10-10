@@ -1,4 +1,4 @@
-@Library('roboshop-shared-library@main')
+@Library('roboshop-shared-library@main') _
 
 env.COMPONENT="shipping"
 maven()
