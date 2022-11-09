@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shipping
+  labels:
+    app: shipping
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shipping 
+  template:
+    metadata:
+      labels:
+        app: shipping
+    spec:
+      containers:
+      - name: shipping
+        image: xxxxxxxxxxxx.dkr.ecr.us-east-1.amazonaws.com/shipping:7.0.0
+        ports:
+        - containerPort: 8080
+        envFrom: 
+          - configMapRef: 
+              name: shipping-cm 
+
+--- 
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shipping-cm
+data:
+  DB_HOST: mysql-dev.roboshopdirect.internal
+  CART_ENDPOINT: cart-service 
+
+
+
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: shipping-service
+spec:
+  selector:
+    app: shipping
+  ports:
+  - name: name-of-service-port
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
